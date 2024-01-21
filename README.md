@@ -1,5 +1,5 @@
 # Libary-Project
-This is a web application in which you can keep online records in the library.
+This is a web application in which you can keep online records in the library (Located in the master branch).
 
 This is a web application with 2 roles - a simple user and a librarian (administrator).
 
