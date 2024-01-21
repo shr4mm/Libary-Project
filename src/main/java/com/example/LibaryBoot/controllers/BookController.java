@@ -121,7 +121,7 @@ public class BookController {
             case "author": books = booksService.findLikeBookByAuthor(like);
             break;
             case "yearOfProduction":
-                if (!like.equals("&&&&&")) {
+                if (like.matches("-?\\d+")) {
                     books = booksService.findLikeBookByYearOfProduction(Integer.parseInt(like));
                 }else break;
             break;
