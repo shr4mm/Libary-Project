@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 20px;
+            text-align: center;
+        }
+
+        div.book-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        div.empty-message {
+            margin-top: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div th:each="book : ${allOrders}" class="book-item">
+    <a th:href="@{/books/{id}(id=${book.getId()})}">
+        <strong th:text="${book.getName()}"></strong>,
+        <span th:text="${book.getAuthor()}"></span>,
+        <span th:text="${book.getYearOfProduction()}"></span>
+    </a>
+</div>
+
+<div th:if="${allOrders.isEmpty()}" class="empty-message">
+    <span>There is not a single book that would be ordered</span>
+</div>
+</body>
+</html>

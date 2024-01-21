@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Navigation</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      margin: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    a {
+      display: block;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #2196F3;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    a:hover {
+      background-color: #0b7dda;
+    }
+  </style>
+</head>
+<body>
+<h2>
+  <a th:if="${role.equals('ROLE_ADMIN')}" href="/people">All People</a>
+  <a th:if="${role.equals('ROLE_USER') || role.equals('ROLE_ADMIN')}"
+     th:href="@{/people/{id}(id=${person.getId()})}">My Page</a>
+  <a href="/books">All Books</a>
+  <a href="/books/search">Search Book</a>
+</h2>
+</body>
+</html>

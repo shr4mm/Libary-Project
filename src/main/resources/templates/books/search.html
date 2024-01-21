@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Search</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .not-found {
+            color: #d9534f;
+        }
+
+        .book-info {
+            margin-top: 10px;
+        }
+
+        .owner-info {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<form th:action="@{/books/search}" method="get">
+    <p>Enter your search term:</p>
+    <input type="text" name="like">
+    <input type="submit" value="Search">
+</form>
+<div th:if="${search == true}">
+<div th:if="${bookNull}" class="not-found">
+    <p>Book Not Found</p>
+</div>
+
+<div th:if="${findBook}" class="book-info">
+    <p>
+        <a th:href="@{/books/{id}(id=${findBook.getId()})}">
+            <strong th:text="${findBook.getName()}"></strong>,
+            <span th:text="${findBook.getAuthor()}"></span>,
+            <span th:text="${findBook.getYearOfProduction()}"></span>
+        </a>
+    </p>
+</div>
+
+<div th:if="${owner == null}" class="not-found">
+    <p>Not have Owner</p>
+</div>
+
+<div th:if="${owner != null and personDetails.getRole().equals('ROLE_ADMIN')}" class="owner-info">
+    <p>Owner: <a th:href="@{/people/{id}(id=${owner.getId()})}" th:text="${owner.getName()}"></a></p>
+</div>
+    <div th:if="${owner != null and personDetails.getRole().equals('ROLE_USER')}" class="owner-info">
+        <a>Have owner</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+create table books(
+                      id Serial PRIMARY KEY,
+                      person_id int REFERENCES person(id) ON DELETE SET NULL,
+                      order_person_id int REFERENCES person(id) ON DELETE SET NULL,
+                      name varchar(200) NOT NULL UNIQUE,
+                      author varchar(200) NOT NULL,
+                      year_of_production int CHECK (year_of_production > 1900)
+);
+create table person(
+                    person_id SERIAL PRIMARY KEY,
+                    name  varchar(100) NOT NULL UNIQUE,
+                    age int NOT NULL
+);

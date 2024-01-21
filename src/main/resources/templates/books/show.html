@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Show Book</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 20px;
+        }
+
+        p {
+            margin: 0 0 10px;
+        }
+
+        form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        label, select {
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        select, input[type="submit"] {
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            display: inline-block;
+            padding: 8px;
+            text-decoration: none;
+            background-color: #2196F3;
+            color: #fff;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        a:hover {
+            background-color: #0b7dda;
+        }
+
+        .delete-form {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<p th:text="${book.getName()}"></p>
+<p th:text="${book.getAuthor()}"></p>
+<p th:text="${book.getYearOfProduction()}"></p>
+
+<form th:if="${owner == null && role.equals('ROLE_ADMIN') && order != null}" th:method="PATCH" th:action="@{/books/{id}/add_owner(id=${book.getId()})}">
+    <br/>
+    <label for="person">Is ordered this book: </label>
+    <select id="person" th:object="${person}" th:field="*{id}">
+        <option  th:value="${order.getId()}" th:text="${order.getName()}"></option>
+    </select>
+    <input type="submit" value="Take Owner"/>
+</form>
+
+<div th:if="${owner == null && role.equals('ROLE_ADMIN') && order == null}">
+    <br/>
+    <a>No owner or order</a>
+</div>
+
+
+
+<form th:if="${owner != null && role.equals('ROLE_ADMIN')}"  class="delete-form" th:method="PATCH" th:action="@{/books/{id}/delete_owner(id=${book.getId()})}">
+    <br/>
+    <a th:href="@{/people/{id}(id=${owner.getId()})}">
+        <span th:text="${'Owner ' + owner.getName()}"></span>
+    </a>
+    <input type="submit" value="Delete Owner"/>
+</form>
+
+<a th:if="${role.equals('ROLE_ADMIN')}" th:href="@{/books/{id}/edit(id=${book.getId()})}"> <br/>
+    Edit</a>
+
+<form th:if="${role.equals('ROLE_ADMIN')}" class="delete-form" th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
+    <br/>
+    <input  type="submit" value="Delete">
+</form>
+
+<div th:if="${owner == null}">
+
+<form th:if="${order == null}" th:method="POST" th:action="@{/books/order/{id}(id=${personn.getId()})}">
+    <br/>
+    <input type="hidden" name="bookId" th:value="${book.getId()}">
+    <input type="submit" value="Order a book">
+</form>
+
+<div th:if="${order != null and !personn.getRole().equals('ROLE_ADMIN') or owner != null and !personn.getRole().equals('ROLE_ADMIN')}">
+    <br/>
+    <a>This book is reserved</a>
+</div>
+
+<form th:if="${order != null && order?.getId() == personn?.getId() or order != null && personn.getRole().equals('ROLE_ADMIN')}"
+      th:method="DELETE" th:action="@{/books/order/{id}(id=${book.getId()})}">
+    <br/>
+    <input type="submit" value="Release the book"/>
+</form>
+</div>
+<div th:if="${owner != null and personn.getId() != owner.getId()}">
+    <br/>
+    <a>This book was taken</a>
+</div>
+</body>
+</html>

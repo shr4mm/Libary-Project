@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Books</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 20px;
+        }
+
+        a {
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.3s;
+        }
+
+        a:hover {
+            background-color: #f0f0f0;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #ddd;
+            margin: 20px 0;
+        }
+
+        .create-book-link {
+            margin-top: 20px;
+            display: inline-block;
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .create-book-link:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div th:each="book : ${books}">
+    <a th:href="@{/books/{id}(id=${book.getId()})}">
+        <strong th:text="${book.getName()}"></strong>,
+        <span th:text="${book.getAuthor()}"></span>,
+        <span th:text="${book.getYearOfProduction()}"></span>
+    </a>
+</div>
+
+<p>
+    <a href="/books?sort_by_year_of_production=true">Sorting by year</a>
+</p>
+
+<hr/>
+<a href="/books/show_orders" class="create-book-link" th:if="${role.equals('ROLE_ADMIN')}">show all books for which there are orders</a>
+
+<br/>
+
+<a href="/books/new" class="create-book-link" th:if="${role.equals('ROLE_ADMIN')}">Create new book</a>
+</body>
+</html>
