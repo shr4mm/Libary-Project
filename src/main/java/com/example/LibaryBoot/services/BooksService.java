@@ -74,6 +74,16 @@ public class BooksService {
     public List<Book> findAllSortedByYearOfProduction() {
         return booksRepository.findAll(Sort.by(Sort.Order.asc("yearOfProduction")));
     }
+    public List<Book>findLikeBookByName(String name){
+        return booksRepository.findLikeBookByName(name);
+    }
+    public List<Book>findLikeBookByAuthor(String author){
+        return booksRepository.findLikeBookByAuthor(author);
+    }
+    public List<Book>findLikeBookByYearOfProduction(int yearOfProduction){
+        return booksRepository.findBookByYearOfProduction(yearOfProduction);
+    }
+
     public List<Book> BooksForWhichThereAreOrder(){
        return booksRepository.booksForWhichThereAreOrders();
     }

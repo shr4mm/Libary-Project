@@ -13,6 +13,13 @@ import java.util.Optional;
 
 public interface BooksRepository extends JpaRepository<Book, Integer> {
     List<Book> findByOwner(Person owner);
+    @Query("SELECT b FROM Book b WHERE b.name LIKE %:like%")
+    List<Book> findLikeBookByName(@Param("like") String name);
+    @Query("SELECT b FROM Book b WHERE b.author LIKE %:like%")
+    List<Book> findLikeBookByAuthor(@Param("like") String author);
+    @Query("SELECT b FROM Book b WHERE b.yearOfProduction = :year")
+    List<Book> findBookByYearOfProduction(@Param("year") int year);
+
     @Query("SELECT b FROM Book b WHERE b.order IS NOT NULL")
     List<Book> booksForWhichThereAreOrders();
     @Modifying

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -111,8 +112,20 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public String searchPage(Model model, @RequestParam(name = "like", defaultValue = "&&&&&") String like) {
-        List<Book> books = booksService.findBooksByNameContains(like);
+    public String searchPage(Model model, @RequestParam(name = "like", defaultValue = "&&&&&") String like,
+                             @RequestParam(name = "sort", defaultValue = "name") String sort) {
+        List<Book> books = new ArrayList<>();
+        switch (sort){
+            case "name": books = booksService.findLikeBookByName(like);
+            break;
+            case "author": books = booksService.findLikeBookByAuthor(like);
+            break;
+            case "yearOfProduction":
+                if (!like.equals("&&&&&")) {
+                    books = booksService.findLikeBookByYearOfProduction(Integer.parseInt(like));
+                }else break;
+            break;
+        }
         Book book = null;
         if(!books.isEmpty()) {
             book = books.get(0);
@@ -120,8 +133,7 @@ public class BookController {
             if (book == null) {
                 model.addAttribute("bookNull", true);
             } else {
-                model.addAttribute("findBook", books.get(0));
-                model.addAttribute("owner", booksService.findOwnerByBookId(book.getId()));
+                model.addAttribute("findBook", books);
                 model.addAttribute("personDetails", peopleService.deteilsPerson());
             }
         if (!like.equals("&&&&&")) {

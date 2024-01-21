@@ -51,16 +51,24 @@
 </head>
 <body>
 <form th:action="@{/books/search}" method="get">
+    <label for="sorting">Select search type </label>
+    <select id="sorting" name="sort">
+        <option value="name">name</option>
+        <option value="author">author</option>
+        <option value="yearOfProduction">year of production</option>
+    </select>
+    <br/>
     <p>Enter your search term:</p>
     <input type="text" name="like">
     <input type="submit" value="Search">
 </form>
+
 <div th:if="${search == true}">
 <div th:if="${bookNull}" class="not-found">
     <p>Book Not Found</p>
 </div>
 
-<div th:if="${findBook}" class="book-info">
+<div th:if="${findBook}" class="book-info" th:each="findBook : ${findBook}">
     <p>
         <a th:href="@{/books/{id}(id=${findBook.getId()})}">
             <strong th:text="${findBook.getName()}"></strong>,
@@ -68,18 +76,17 @@
             <span th:text="${findBook.getYearOfProduction()}"></span>
         </a>
     </p>
-</div>
-
-<div th:if="${owner == null}" class="not-found">
-    <p>Not have Owner</p>
-</div>
-
-<div th:if="${owner != null and personDetails.getRole().equals('ROLE_ADMIN')}" class="owner-info">
-    <p>Owner: <a th:href="@{/people/{id}(id=${owner.getId()})}" th:text="${owner.getName()}"></a></p>
-</div>
-    <div th:if="${owner != null and personDetails.getRole().equals('ROLE_USER')}" class="owner-info">
+    <div th:if="${findBook.owner != null and personDetails.getRole().equals('ROLE_ADMIN')}" class="owner-info">
+        <p>Owner: <a th:href="@{/people/{id}(id=${findBook.owner.getId()})}" th:text="${findBook.owner.getName()}"></a></p>
+    </div>
+    <div th:if="${findBook.owner != null and personDetails.getRole().equals('ROLE_USER')}" class="owner-info">
         <a>Have owner</a>
     </div>
+    <div th:if="${findBook.owner == null}" class="not-found">
+        <p>Not have Owner</p>
+    </div>
+</div>
+
 </div>
 </body>
 </html>
