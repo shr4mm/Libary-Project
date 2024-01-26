@@ -11,3 +11,9 @@ create table person(
                     name  varchar(100) NOT NULL UNIQUE,
                     age int NOT NULL
 );
+create table comments(
+    id SERIAL PRIMARY KEY,
+    person_id int REFERENCES person(id) ON DELETE SET NULL,
+    book_id int REFERENCES books(id) ON DELETE SET NULL,
+    comment varchar
+);

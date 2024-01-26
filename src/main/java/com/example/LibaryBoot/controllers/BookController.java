@@ -2,9 +2,11 @@ package com.example.LibaryBoot.controllers;
 
 
 import com.example.LibaryBoot.models.Book;
+import com.example.LibaryBoot.models.Comment;
 import com.example.LibaryBoot.models.Person;
 import com.example.LibaryBoot.security.PersonDetails;
 import com.example.LibaryBoot.services.BooksService;
+import com.example.LibaryBoot.services.CommentsService;
 import com.example.LibaryBoot.services.PeopleService;
 import com.example.LibaryBoot.util.BookValidator;
 import jakarta.validation.Valid;
@@ -25,12 +27,14 @@ public class BookController {
     private final PeopleService peopleService;
     private final BooksService booksService;
     private final BookValidator validator;
+    private final CommentsService commentsService;
 
     @Autowired
-    public BookController(PeopleService peopleService, BooksService booksService, BookValidator validator) {
+    public BookController(PeopleService peopleService, BooksService booksService, BookValidator validator, CommentsService commentsService) {
         this.peopleService = peopleService;
         this.booksService = booksService;
         this.validator = validator;
+        this.commentsService = commentsService;
     }
 
     @GetMapping
@@ -58,6 +62,7 @@ public class BookController {
         model.addAttribute("role", personn.getRole());
         model.addAttribute("personn", personn);
         model.addAttribute("order", booksService.findOne(id).getOrder());
+        model.addAttribute("comments", commentsService.findCommentsByBookId(id));
         return "books/show";
     }
 
@@ -159,5 +164,18 @@ public class BookController {
     public String showAllOrdersForAdmin(Model model){
         model.addAttribute("allOrders", booksService.BooksForWhichThereAreOrder());
         return "books/admin/showOrders";
+    }
+    @PatchMapping("/{id}/comment")
+    public String addComment(@PathVariable("id") int id, @RequestParam(name = "comment", defaultValue = "ff") String commentText){
+        if(commentText.equals("ff")){
+            return "redirect:/books/" + id;
+        }else {
+            Comment comment = new Comment();
+            comment.setComment(commentText);
+            comment.setOwner(peopleService.deteilsPerson());
+            comment.setBookId(id);
+            commentsService.save(comment);
+        }
+        return "redirect:/books/" + id;
     }
 }

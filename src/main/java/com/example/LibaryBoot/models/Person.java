@@ -22,6 +22,7 @@ public class Person {
     @OneToMany(mappedBy = "owner")
     List<Book> books;
 
+
     @OneToMany(mappedBy = "order")
     List<Book> orders;
 
@@ -100,6 +101,14 @@ public class Person {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Book> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Book> orders) {
+        this.orders = orders;
     }
 }
 

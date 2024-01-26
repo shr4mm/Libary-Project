@@ -65,6 +65,7 @@
 <p th:text="${book.getAuthor()}"></p>
 <p th:text="${book.getYearOfProduction()}"></p>
 
+
 <form th:if="${owner == null && role.equals('ROLE_ADMIN') && order != null}" th:method="PATCH" th:action="@{/books/{id}/add_owner(id=${book.getId()})}">
     <br/>
     <label for="person">Is ordered this book: </label>
@@ -119,6 +120,21 @@
 <div th:if="${owner != null and personn.getId() != owner.getId()}">
     <br/>
     <a>This book was taken</a>
+</div>
+
+<form th:method="PATCH" th:action="@{/books/{id}/comment(id=${book.getId()})}">
+    <br/>
+    <label for="comment">Write a comment</label>
+    <input type="text"  id="comment" name="comment">
+    <input type="submit" value="Add a comment">
+</form>
+
+<p>Comments</p>
+<br/>
+<div th:each="comment : ${comments}">
+    <p>
+        <strong th:text="${comment.getOwner().getName()} + ': ' + ${comment.getComment()}"></strong>
+    </p>
 </div>
 </body>
 </html>
