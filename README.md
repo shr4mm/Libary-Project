@@ -11,6 +11,7 @@ Using your user account you can:
 - search books by title
 - possibility to select a search (name/author/year of publication)
 - Add comments to books
+  
 The user can also go to his personal page, where the following is displayed:
 - books that are currently on hand
 - books reserved but not yet issued
